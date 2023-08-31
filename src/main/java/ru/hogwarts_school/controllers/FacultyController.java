@@ -1,5 +1,6 @@
 package ru.hogwarts_school.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.service.FacultyService;
@@ -17,7 +18,7 @@ public class FacultyController {
 
     @PostMapping
     public Faculty create(@RequestBody Faculty faculty) {
-        return facultyService.addFaculty(faculty.getName(), faculty.getColor());
+        return facultyService.addFaculty(faculty);
     }
 
     @GetMapping("/{id}")
@@ -27,17 +28,21 @@ public class FacultyController {
 
     @PutMapping
     public Faculty editFaculty(@RequestBody Faculty faculty) {
-        return facultyService.editFaculty(faculty.getId(), faculty.getName(), faculty.getColor());
+        return facultyService.editFaculty(faculty);
     }
 
     @DeleteMapping
-    public Faculty delete(@RequestParam long id) {
-        return facultyService.delete(id);
-
+    public ResponseEntity delete(@RequestParam long id) {
+         facultyService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
+//    @GetMapping
+//    public List<Faculty> getAllByColor(@RequestParam String color) {
+//        return facultyService.getAllByColor(color);
+//    }
     @GetMapping
-    public List<Faculty> getAllByColor(@RequestParam String color) {
-        return facultyService.getAllByColor(color);
+    public List<Faculty> getAllFaculty() {
+        return facultyService.getAllFaculty();
     }
 }

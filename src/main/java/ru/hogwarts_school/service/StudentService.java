@@ -1,60 +1,51 @@
 package ru.hogwarts_school.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts_school.exceptions.StudentDoesNotExistException;
 import ru.hogwarts_school.model.Student;
+import ru.hogwarts_school.repositories.StudentRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
-    private final Map<Long, Student> studentMap = new HashMap<>();
-    private static long lastId = 0;
+    private final StudentRepository studentRepository;
 
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
-    public Student addStudent(String name, int age) {
-
-        Student student = new Student(++lastId, name, age);
-        studentMap.put(student.getId(), student);
-
-        return student;
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
     }
 
     public Student findStudent(long Id) {
-        if (studentMap.containsKey(Id)) {
-            return studentMap.get(Id);
-        }
-        throw new StudentDoesNotExistException("Студента с таким именем не существует");
+        return studentRepository.findById(Id).get();
     }
 
-    public Student editStudent(long id, String name, int age) {
-        Student student = studentMap.get(id);
-        student.setName(name);
-        student.setAge(age);
-        return student;
+    public Student editStudent(Student student) {
+//
+        return studentRepository.save(student);
+    }
+
+    public void delete(long id) {
+//        Student student = studentMap.get(id);
+//        if (studentMap.containsKey(id)) {
+//            studentMap.remove(id);
+//            return student;
+//        }
+//        throw new StudentDoesNotExistException("Студента с таким именем не существует");
+        studentRepository.deleteById(id);
 
     }
 
-    public Student delete(long id) {
-        Student student = studentMap.get(id);
-        if (studentMap.containsKey(id)) {
-            studentMap.remove(id);
-            return student;
-        }
-        throw new StudentDoesNotExistException("Студента с таким именем не существует");
-    }
+//    public List<Student> getAllByAge(int age) {
+//        return studentMap.values().stream()
+//                .filter(student -> student.getAge() == age)
+//                .collect(Collectors.toList());
+//    }
 
-    public List<Student> getAllByAge(int age) {
-        return studentMap.values().stream()
-                .filter(student -> student.getAge() == age)
-                .collect(Collectors.toList());
-    }
-
-    public Map<Long, Student> getStudentMap() {
-        return studentMap;
+    public List<Student> getAllStudent() {
+        return studentRepository.findAll();
     }
 
 
