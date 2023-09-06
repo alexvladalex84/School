@@ -1,6 +1,8 @@
 package ru.hogwarts_school.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 import ru.hogwarts_school.repositories.StudentRepository;
 
@@ -15,15 +17,13 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
+
         return studentRepository.save(student);
     }
 
-    public Student findStudent(long Id) {
-        return studentRepository.findById(Id).get();
-    }
 
     public Student editStudent(Student student) {
-//
+
         return studentRepository.save(student);
     }
 
@@ -38,15 +38,31 @@ public class StudentService {
 
     }
 
-//    public List<Student> getAllByAge(int age) {
-//        return studentMap.values().stream()
-//                .filter(student -> student.getAge() == age)
-//                .collect(Collectors.toList());
-//    }
 
-    public List<Student> getAllStudent() {
-        return studentRepository.findAll();
+    public ResponseEntity getAllStudent(Long Id, Integer age, String name) {
+        if (Id != null) {
+            return ResponseEntity.ok(studentRepository.findById(Id));
+        }
+        if (age != null) {
+            return ResponseEntity.ok(studentRepository.findByAge(age));
+        }
+        if (name != null) {
+            return ResponseEntity.ok(studentRepository.findStudentByNameContainsIgnoreCase(name));
+        }
+
+        return ResponseEntity.ok(studentRepository.findAll());
     }
 
 
+    public List<Student> findByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
+    }
+
+    public Faculty getFaculty(Long studentId) {
+        return studentRepository.findById(studentId).get().getFaculty();
+    }
+
+    public List<Student> findByFacultyId(long facultyId) {
+        return studentRepository.findByFacultyId(facultyId);
+    }
 }
