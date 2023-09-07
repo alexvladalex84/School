@@ -53,6 +53,9 @@ public class StudentService {
         return ResponseEntity.ok(studentRepository.findAll());
     }
 
+    public Student findById(Long id) {
+        return studentRepository.findById(id).get();
+    }
 
     public List<Student> findByAgeBetween(int min, int max) {
         return studentRepository.findByAgeBetween(min, max);
