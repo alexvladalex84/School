@@ -5,11 +5,14 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Entity
 public class Avatar {
     @Id
-    @GeneratedValue
+    @GeneratedValue()
     private Long id;
+
 
     private String filePath;           //путь файла на локальном диске(хранение на локальном диске)
     private long fileSize;             //размер этого файла

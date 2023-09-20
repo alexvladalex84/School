@@ -27,9 +27,9 @@ public class FacultyController {
 //        return facultyService.findFaculty(id);
 //    }
 
-    @PutMapping
-    public Faculty editFaculty(@RequestBody Faculty faculty) {
-        return facultyService.editFaculty(faculty);
+    @PutMapping("/{id}")
+    public Faculty editFaculty(@PathVariable Long id,@RequestBody Faculty faculty) {
+        return facultyService.editFaculty(id,faculty);
     }
 
     @DeleteMapping
@@ -50,13 +50,18 @@ public class FacultyController {
         return facultyService.getAllFaculty(Id, partName, partColor);
     }
 
+    @GetMapping("/{id}")
+    public Faculty getFacultyById(@PathVariable Long id) {
+        return facultyService.getFacultyById(id);
+    }
+
     @GetMapping("/name-or-color")
     public List<Faculty> findByNameContainsIgnoreCaseOrColorContainsIgnoreCase(@RequestParam String param) {
         return facultyService.findByNameContainsIgnoreCaseOrColorContainsIgnoreCase(param);
     }
 
     @GetMapping("/student-byIdFaculty")
-    public List<Student> studentByIdFaculty(@RequestParam Long IdFaculty) {
-        return facultyService.getStudentByIdOfFaculty(IdFaculty);
+    public List<Student> studentByIdFaculty(@RequestParam Long id) {
+        return facultyService.getStudentByIdOfFaculty(id);
     }
 }

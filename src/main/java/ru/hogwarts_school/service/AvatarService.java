@@ -1,7 +1,6 @@
 package ru.hogwarts_school.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,30 +21,30 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Transactional
 public class AvatarService {
 
-    @Value("${path.to.avatars.folder}")
+
     private String avatarsDir;
 
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
 
-    public AvatarService(AvatarRepository avatarRepository, StudentService studentService) {
+    public AvatarService(@Value("${path.to.avatars.folder}") String avatarsDir, AvatarRepository avatarRepository, StudentService studentService) {
+        this.avatarsDir = avatarsDir;
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
     }
 
-
     public void upLoadAvatar(Long studentId, MultipartFile file) throws IOException {
-       Student student = studentService.findById(studentId);
+        Student student = studentService.findById(studentId);
 
-        Path filePath = Path.of("/avatars", studentId + "." + getExtensions(file.getOriginalFilename()));
+        Path filePath = Path.of(avatarsDir, student + "." + getExtensions(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);                            //удаляет файл если тот существует по определенному адресу
 
 
         try (InputStream is = file.getInputStream();     //открыть входной паток и читать данные загруженного файла
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);  //место куда данные будем добавлять
-            BufferedInputStream bis = new BufferedInputStream(is, 1024); //входной поток (сколько за раз будем забирать)
-            BufferedOutputStream bos = new BufferedOutputStream(os, 1024);)//выходной поток (сколько за раз будем высыпть)
+             BufferedInputStream bis = new BufferedInputStream(is, 1024); //входной поток (сколько за раз будем забирать)
+             BufferedOutputStream bos = new BufferedOutputStream(os, 1024);)//выходной поток (сколько за раз будем высыпть)
         {
             bis.transferTo(bos);//передача данных из входного в выходной поток
         }
@@ -57,13 +56,13 @@ public class AvatarService {
         avatar.setMediaType(file.getContentType());  //тип контент
         avatar.setData(generateImagePreview(filePath));    //для хранения в базе данных ,уменьшаем файл
 
-         avatarRepository.save(avatar);
+        avatarRepository.save(avatar);
     }
 
     private byte[] generateImagePreview(Path filePath) throws IOException {
         try (InputStream is = Files.newInputStream(filePath);
-        BufferedInputStream bis = new BufferedInputStream(is,1024);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
             BufferedImage image = ImageIO.read(bis);
 
@@ -79,10 +78,14 @@ public class AvatarService {
         }
 
     }
+
     public Avatar findAvatar(Long studentId) {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
+
     private String getExtensions(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("." ));
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+
+
     }
 }

@@ -2,6 +2,7 @@ package ru.hogwarts_school.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.hogwarts_school.exceptions.FacultyNotFoundException;
 import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 import ru.hogwarts_school.repositories.FacultyRepository;
@@ -23,13 +24,14 @@ public class FacultyService {
 
     }
 
-//    public Faculty findFaculty(long Id) {
-//       return facultyRepository.findById(Id).get();
-//    }
+    public Faculty editFaculty(Long id, Faculty faculty) {
+        Faculty fa = facultyRepository.getById(id);
+        fa.setName(faculty.getName());
+        fa.setColor(faculty.getColor());
 
-    public Faculty editFaculty(Faculty faculty) {
-        return facultyRepository.save(faculty);
+        return facultyRepository.save(fa);
     }
+
 
     public void delete(long Id) {
         facultyRepository.deleteById(Id);
@@ -48,6 +50,11 @@ public class FacultyService {
         }
 
         return ResponseEntity.ok(facultyRepository.findAll());
+    }
+
+    public Faculty getFacultyById(Long id) {
+
+        return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
     }
 
     public List<Faculty> findByNameContainsIgnoreCaseOrColorContainsIgnoreCase(String param) {
