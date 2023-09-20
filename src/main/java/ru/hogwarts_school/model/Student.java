@@ -27,6 +27,11 @@ public class Student {
         this.name = name;
         this.age = age;
     }
+    public Student( String name, int age) {
+
+        this.name = name;
+        this.age = age;
+    }
 
     public Faculty getFaculty() {
         return faculty;

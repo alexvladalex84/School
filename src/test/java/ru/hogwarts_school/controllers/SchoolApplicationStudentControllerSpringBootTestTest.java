@@ -124,14 +124,7 @@ class SchoolApplicationStudentControllerSpringBootTestTest {
 
 
     }
-    /* @GetMapping
-    public ResponseEntity getAllStudentByParameters(@RequestParam(required = false) Long Id,
-                                                    @RequestParam(required = false) Integer age,
-                                                    @RequestParam(required = false) String name
 
-    ) {
-        return studentService.getAllStudent(Id, age, name);
-    }*/
 
     @Test
     public void getFacultyByIdStudent() {
