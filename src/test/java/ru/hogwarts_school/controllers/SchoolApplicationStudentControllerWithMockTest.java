@@ -220,5 +220,49 @@ class SchoolApplicationStudentControllerWithMockTest {
 
     }
 
+    @Test
+    public void countStudents() throws Exception {
+        when(studentRepository.getCountStudent()).thenReturn(3);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/count_students"))
+
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void Average_Age_Students() throws Exception {
+        when(studentRepository.getCountAverageAge()).thenReturn(25);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/Average_Age_Students"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void get_last_students() throws Exception {
+        Student student1 = new Student();
+        student1.setId(1L);
+        student1.setName("Bob");
+        student1.setAge(20);
+
+        Student student2 = new Student();
+        student2.setId(2L);
+        student2.setName("Alex");
+        student2.setAge(21);
+
+        when(studentRepository.lastStudents()).thenReturn(List.of(student1, student2));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/student/get_last_students")
+
+                        .content(objectMapper.writeValueAsString(student1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name").value("Bob"))
+                .andExpect(jsonPath("$[1].name").value("Alex"));
+
+    }
 
 }

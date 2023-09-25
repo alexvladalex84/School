@@ -9,11 +9,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts_school.SchoolApplication;
 import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 
 import java.util.Collection;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 //import static org.assertj.core.api.Assertions.assertThat;
@@ -207,6 +211,65 @@ class SchoolApplicationStudentControllerSpringBootTestTest {
         Assertions.assertThat(responseStudentAgeBetween.getBody()).isNotNull();
         Assertions.assertThat(responseStudentAgeBetween.getBody());
 
+
+    }
+    @Test
+    public void countStudents() throws Exception {
+        Student student = new Student();
+
+        student.setName("Bob");
+        student.setAge(25);
+        ResponseEntity<Student> responseStudent = restTemplate.postForEntity("/student", student, Student.class);
+        Assertions.assertThat(responseStudent).isNotNull();
+        Assertions.assertThat(responseStudent.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+
+        Student student1 = new Student();
+
+        student.setName("Alex");
+        student.setAge(20);
+        ResponseEntity<Student> responseStudent1 = restTemplate.postForEntity("/student", student, Student.class);
+        Assertions.assertThat(responseStudent1).isNotNull();
+        Assertions.assertThat(responseStudent1.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+
+        ResponseEntity<Integer> responseGet = restTemplate.getForEntity("/student/count_students" , Integer.class);
+        Assertions.assertThat(responseGet).isNotNull();
+        Assertions.assertThat(responseGet.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(responseGet.getBody()).isEqualTo(9);
+    }
+    @Test
+    public void Average_Age_Students() {
+        Student student = new Student();
+
+        student.setName("Bob");
+        student.setAge(25);
+        ResponseEntity<Student> responseStudent = restTemplate.postForEntity("/student", student, Student.class);
+        Assertions.assertThat(responseStudent).isNotNull();
+        Assertions.assertThat(responseStudent.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+
+        Student student1 = new Student();
+
+        student.setName("Alex");
+        student.setAge(20);
+        ResponseEntity<Student> responseStudent1 = restTemplate.postForEntity("/student", student, Student.class);
+        Assertions.assertThat(responseStudent1).isNotNull();
+        Assertions.assertThat(responseStudent1.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Student student2 = new Student();
+
+        student.setName("Max");
+        student.setAge(30);
+        ResponseEntity<Student> responseStudent2 = restTemplate.postForEntity("/student", student, Student.class);
+        Assertions.assertThat(responseStudent2).isNotNull();
+        Assertions.assertThat(responseStudent2.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+
+        ResponseEntity<Integer> responseGet = restTemplate.getForEntity("/student/Average_Age_Students" , Integer.class);
+        Assertions.assertThat(responseGet).isNotNull();
+        Assertions.assertThat(responseGet.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(responseGet.getBody()).isEqualTo(25);
 
     }
 
