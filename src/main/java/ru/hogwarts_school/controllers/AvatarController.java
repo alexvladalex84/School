@@ -62,8 +62,8 @@ public class AvatarController {
 
         }
     }
-    @GetMapping(value = "page-size")
-    public List<Avatar > getPage(int pageNumber, int pageSize) {
+    @GetMapping
+    public List<Avatar > getPage(int pageNumber, int pageSize)  {
 
         return avatarService.getPage(pageNumber, pageSize);
     }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts_school.exceptions.NegativeNumberException;
 import ru.hogwarts_school.model.Avatar;
 import ru.hogwarts_school.model.Student;
 import ru.hogwarts_school.repositories.AvatarRepository;
@@ -85,9 +86,13 @@ public class AvatarService {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
-    public List<Avatar > getPage(int pageNumber, int pageSize) {
+    public List<Avatar> getPage(int pageNumber, int pageSize) {
+        if (pageNumber < 0 || pageSize < 0) {
+            throw new NegativeNumberException();
+        }
         PageRequest page = PageRequest.of(pageNumber, pageSize);
         return avatarRepository.findAll(page).getContent();
+
     }
 
     private String getExtensions(String fileName) {
@@ -95,4 +100,4 @@ public class AvatarService {
     }
 
 
-    }
+}
