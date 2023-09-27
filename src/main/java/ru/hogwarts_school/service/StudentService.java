@@ -89,7 +89,7 @@ public class StudentService {
      return    studentRepository.getCountStudent();
     }
 
-    public Integer getCountAverageAge() {
+    public Double getCountAverageAge() {
         return studentRepository.getCountAverageAge();
     }
 

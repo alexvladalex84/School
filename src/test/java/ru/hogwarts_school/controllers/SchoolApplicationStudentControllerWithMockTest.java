@@ -231,7 +231,7 @@ class SchoolApplicationStudentControllerWithMockTest {
 
     @Test
     public void Average_Age_Students() throws Exception {
-        when(studentRepository.getCountAverageAge()).thenReturn(25);
+        when(studentRepository.getCountAverageAge()).thenReturn(25.0);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/student/Average_Age_Students"))
