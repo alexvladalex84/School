@@ -1,5 +1,7 @@
 package ru.hogwarts_school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts_school.exceptions.FacultyNotFoundException;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Service
 public class FacultyService {
+    Logger LOG = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
     private final StudentService studentService;
 
@@ -53,7 +56,8 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-
+LOG.info("был вызван метод : getFacultyById(Long id)");
+LOG.error("ошибка : getFacultyById(Long id) введён не корректный id");
         return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
     }
 

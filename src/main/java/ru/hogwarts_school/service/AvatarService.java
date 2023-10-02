@@ -1,5 +1,7 @@
 package ru.hogwarts_school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 public class AvatarService {
-
-
+    Logger LOG = LoggerFactory.getLogger(AvatarService.class);
     private String avatarsDir;
 
     private final AvatarRepository avatarRepository;
@@ -87,6 +88,7 @@ public class AvatarService {
     }
 
     public List<Avatar> getPage(int pageNumber, int pageSize) {
+
         if (pageNumber < 0 || pageSize < 0) {
             throw new NegativeNumberException();
         }

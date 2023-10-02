@@ -41,10 +41,7 @@ public class StudentController {
         return studentService.findById(id);
     }
 
-//    @GetMapping
-//    public ResponseEntity getAllStudent() {
-//        return studentService.getAll();
-//    }
+
 
     @GetMapping("/By-Age-Between")
     public List<Student> findByAgeBetween(@RequestParam int min, @RequestParam int max) {

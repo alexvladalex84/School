@@ -1,5 +1,9 @@
 package ru.hogwarts_school.service;
 
+
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts_school.exceptions.StudentNotFoundException;
@@ -10,8 +14,11 @@ import ru.hogwarts_school.repositories.StudentRepository;
 
 import java.util.List;
 
+
 @Service
 public class StudentService {
+
+    Logger LOG = LoggerFactory.getLogger(StudentService.class);
     private final StudentRepository studentRepository;
     private final AvatarRepository avatarRepository;
 
@@ -22,12 +29,14 @@ public class StudentService {
     }
 
     public Student addStudent(Student student) {
-
+        LOG.info("был вызван метод :addStudent(Student student)");
         return studentRepository.save(student);
     }
 
 
     public Student editStudent(Long id, Student student) {
+        LOG.info("был вызван метод : editStudent(Long id, Student student)");
+
         Student st = studentRepository.getById(id);
         st.setName(student.getName());
         st.setAge(student.getAge());
@@ -36,6 +45,7 @@ public class StudentService {
     }
 
     public void delete(Long id) {
+        LOG.info("был вызван метод : delete(Long id)");
 //     Student student = studentRepository.findById(id).get();
 //               Avatar avatar = avatarRepository.findByStudentId(id).get();
 //
@@ -51,7 +61,10 @@ public class StudentService {
 
 
     public ResponseEntity getAllStudent(Long Id, Integer age, String name) {
+        LOG.info("был вызван метод : getAllStudent(Long Id, Integer age, String name)");
+
         if (Id != null) {
+
             return ResponseEntity.ok(studentRepository.findById(Id));
         }
         if (age != null) {
@@ -65,35 +78,55 @@ public class StudentService {
     }
 
     public ResponseEntity getAll() {
+        LOG.info("был вызван метод : getAll()");
         return ResponseEntity.ok(studentRepository.findAll());
     }
 
     public Student findById(Long id) {
+        LOG.info("был вызван метод : findById(Long id)");
+        Student student =studentRepository.findById(id).get();
+        if (student == null) {
+            LOG.info("ошибка:в параметр метода findById(Long id) введён не корректный id");
+        }
+
+//        try {
+//            throw new StudentNotFoundException("!!!ОШИБКА!!!");
+//
+//        } catch ( Exception e) {
+//            LOG.error("ошибка:в параметр метода findById(Long id) введён не корректный id",e.getMessage());
+//        }
 //        return studentRepository.findById(id).get();
         return studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
+
     }
 
     public List<Student> findByAgeBetween(int min, int max) {
+        LOG.info("был вызван метод : findByAgeBetween(int min, int max)");
         return studentRepository.findByAgeBetween(min, max);
     }
 
     public Faculty getFaculty(Long studentId) {
+        LOG.info("был вызван метод : getFaculty(Long studentId)");
         return studentRepository.findById(studentId).get().getFaculty();
     }
 
     public List<Student> findByFacultyId(long facultyId) {
+        LOG.info("был вызван метод : findByFacultyId(long facultyId)");
         return studentRepository.findByFacultyId(facultyId);
     }
 
     public Integer getCountStudent() {
-     return    studentRepository.getCountStudent();
+        LOG.info("был вызван метод : getCountStudent()");
+        return     studentRepository.getCountStudent();
     }
 
     public Double getCountAverageAge() {
+        LOG.info("был вызван метод : getCountAverageAge()");
         return studentRepository.getCountAverageAge();
     }
 
    public List<Student> lastStudents() {
+       LOG.info("был вызван метод : lastStudents()");
        return studentRepository.lastStudents();
    }
 
