@@ -1,8 +1,10 @@
 package ru.hogwarts_school.controllers;
 
+import liquibase.Liquibase;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -12,13 +14,16 @@ import ru.hogwarts_school.SchoolApplication;
 import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 
+import java.nio.file.Path;
 import java.util.Collection;
 
 
-@SpringBootTest(classes = SchoolApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest( webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SchoolApplicationFacultyControllerSpringBootTestTest {
     @Autowired
     private TestRestTemplate restTemplate;
+    @Value("${spring.liquibase.change-log}")
+    private Path path;
     @LocalServerPort
     private int port;
 
@@ -91,6 +96,7 @@ public class SchoolApplicationFacultyControllerSpringBootTestTest {
         Faculty faculty = new Faculty();
         faculty.setName("faculty");
         faculty.setColor("Green");
+
         ResponseEntity<Faculty> responseCreate = restTemplate.postForEntity("/faculty", faculty, Faculty.class);
         Assertions.assertThat(responseCreate).isNotNull();
         Assertions.assertThat(responseCreate.getStatusCode()).isEqualTo(HttpStatus.OK);

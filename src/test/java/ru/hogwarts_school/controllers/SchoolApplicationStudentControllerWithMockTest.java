@@ -157,6 +157,21 @@ class SchoolApplicationStudentControllerWithMockTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value("Bob"))
                 .andExpect(jsonPath("$[1].name").value("Alex"));
+
+
+        when(studentRepository.findAll()).thenReturn(List.of(student2));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/student/get_of_letter?letter=A")
+
+                        .content(objectMapper.writeValueAsString(student1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$").isArray())
+
+
+                .andExpect(jsonPath("$[0].name").value("Alex"));
+
 //  update  put запрос
 
 

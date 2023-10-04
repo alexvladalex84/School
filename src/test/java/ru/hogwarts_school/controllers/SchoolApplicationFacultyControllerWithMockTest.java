@@ -158,6 +158,23 @@ public class SchoolApplicationFacultyControllerWithMockTest {
                 .andExpect(jsonPath("$[1].color").value("blue"))
                 .andExpect(jsonPath("$[2].color").value("bleak"));
 
+
+        when(facultyRepository.findAll()).thenReturn(List.of(faculty1,faculty2,faculty3)); //самое длинное имя
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/longest_name")
+                        .content(objectMapper.writeValueAsString(faculty1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(3)))
+
+                .andExpect(jsonPath("$[1].name").value("Faculty2"));
+
+
+
+
 //  update  put запрос
 
 

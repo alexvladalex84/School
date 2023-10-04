@@ -38,6 +38,11 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/longest_name")
+    public List<Faculty> getLongestName() {
+       return facultyService.getLongestName();
+    }
+
     //    @GetMapping
 //    public List<Faculty> getAllByColor(@RequestParam String color) {
 //        return facultyService.getAllByColor(color);

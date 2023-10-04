@@ -1,7 +1,6 @@
 package ru.hogwarts_school.service;
 
 
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import ru.hogwarts_school.repositories.AvatarRepository;
 import ru.hogwarts_school.repositories.StudentRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -59,6 +59,22 @@ public class StudentService {
 
     }
 
+    public List<Student> getOfStudentByLetter(String letter) {
+        return studentRepository.findAll()
+                .stream()
+                .filter(i -> i.getName().startsWith(letter))
+                .collect(Collectors.toList());
+
+    }
+
+    public Object getStudentAverageAge() {
+        return studentRepository.findAll()
+                .stream()
+
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow();
+    }
 
     public ResponseEntity getAllStudent(Long Id, Integer age, String name) {
         LOG.info("был вызван метод : getAllStudent(Long Id, Integer age, String name)");

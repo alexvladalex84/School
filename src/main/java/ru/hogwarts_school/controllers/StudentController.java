@@ -26,6 +26,15 @@ public class StudentController {
         return studentService.addStudent(student);
     }
 
+    @GetMapping("/get_of_letter")
+    public List<Student> getOfLetter(@RequestParam String letter) {
+       return studentService.getOfStudentByLetter(letter);
+    }
+
+    @GetMapping("/get_student_average_age")
+    public Object getStudentAverageAge() {
+        return studentService.getStudentAverageAge();
+    }
 
     @GetMapping
     public ResponseEntity getAllStudentByParameters(@RequestParam(required = false) Long Id,

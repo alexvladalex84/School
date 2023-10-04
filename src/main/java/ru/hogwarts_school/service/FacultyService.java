@@ -9,7 +9,10 @@ import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 import ru.hogwarts_school.repositories.FacultyRepository;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
@@ -41,6 +44,26 @@ public class FacultyService {
     }
 
 
+    public List<Faculty> getLongestName() {
+        List<Faculty> faculty = facultyRepository.findAll();
+
+        List<String> nameFaculty = new ArrayList<>();
+
+        for (Faculty f : faculty) {
+            String name = f.getName();
+            nameFaculty.add(name);
+        }
+        int maxNameLength = nameFaculty
+                .stream()
+                .mapToInt(String::length)
+                .max()
+                .orElseThrow();
+        return facultyRepository.findAll().stream()
+                .filter(f -> f.getName().length() == maxNameLength)
+                .collect(Collectors.toList());
+    }
+
+
     public ResponseEntity getAllFaculty(Long Id, String partName, String partColor) {
         if (Id != null) {
             return ResponseEntity.ok(facultyRepository.findById(Id).get());
@@ -57,7 +80,7 @@ public class FacultyService {
 
     public Faculty getFacultyById(Long id) {
 LOG.info("был вызван метод : getFacultyById(Long id)");
-LOG.error("ошибка : getFacultyById(Long id) введён не корректный id");
+
         return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
     }
 
