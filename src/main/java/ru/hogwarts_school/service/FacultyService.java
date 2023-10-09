@@ -9,8 +9,6 @@ import ru.hogwarts_school.model.Faculty;
 import ru.hogwarts_school.model.Student;
 import ru.hogwarts_school.repositories.FacultyRepository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,23 +42,31 @@ public class FacultyService {
     }
 
 
-    public List<Faculty> getLongestName() {
-        List<Faculty> faculty = facultyRepository.findAll();
-
-        List<String> nameFaculty = new ArrayList<>();
-
-        for (Faculty f : faculty) {
-            String name = f.getName();
-            nameFaculty.add(name);
-        }
-        int maxNameLength = nameFaculty
-                .stream()
-                .mapToInt(String::length)
-                .max()
-                .orElseThrow();
+    public String getLongestName() {
         return facultyRepository.findAll().stream()
-                .filter(f -> f.getName().length() == maxNameLength)
-                .collect(Collectors.toList());
+                .map(f -> f.getName())
+                .sorted((x, y) -> y.length() - x.length())
+                .collect(Collectors.toList())
+                .get(0);
+
+
+//        List<Faculty> faculty = facultyRepository.findAll();
+//
+//        List<String> nameFaculty = new ArrayList<>();
+//
+////        for (Faculty f : faculty) {
+////            String name = f.getName();
+////            nameFaculty.add(name);
+////        }
+//        int maxNameLength = nameFaculty
+//
+//                .stream()
+//                .mapToInt(String::length)
+//                .max()
+//                .orElseThrow();
+//        return facultyRepository.findAll().stream()
+//                .filter(f -> f.getName().length() == maxNameLength)
+//                .collect(Collectors.toList());
     }
 
 
@@ -79,7 +85,7 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-LOG.info("был вызван метод : getFacultyById(Long id)");
+        LOG.info("был вызван метод : getFacultyById(Long id)");
 
         return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
     }

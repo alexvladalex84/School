@@ -27,7 +27,7 @@ public class StudentController {
     }
 
     @GetMapping("/get_of_letter")
-    public List<Student> getOfLetter(@RequestParam String letter) {
+    public List<String> getOfLetter(@RequestParam String letter) {
        return studentService.getOfStudentByLetter(letter);
     }
 

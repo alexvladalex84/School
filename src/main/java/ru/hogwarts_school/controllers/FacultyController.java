@@ -39,7 +39,7 @@ public class FacultyController {
     }
 
     @GetMapping("/longest_name")
-    public List<Faculty> getLongestName() {
+    public String getLongestName() {
        return facultyService.getLongestName();
     }
 

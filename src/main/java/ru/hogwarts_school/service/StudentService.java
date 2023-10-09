@@ -59,22 +59,24 @@ public class StudentService {
 
     }
 
-    public List<Student> getOfStudentByLetter(String letter) {
-        return studentRepository.findAll()
-                .stream()
-                .filter(i -> i.getName().startsWith(letter))
+    public List<String> getOfStudentByLetter(String letter) {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith(letter))
+                .sorted()
                 .collect(Collectors.toList());
-
     }
 
     public Object getStudentAverageAge() {
         return studentRepository.findAll()
                 .stream()
-
-                .mapToInt(Student::getAge)
+                .mapToDouble(Student::getAge)
                 .average()
                 .orElseThrow();
+
     }
+
 
     public ResponseEntity getAllStudent(Long Id, Integer age, String name) {
         LOG.info("был вызван метод : getAllStudent(Long Id, Integer age, String name)");
@@ -100,7 +102,7 @@ public class StudentService {
 
     public Student findById(Long id) {
         LOG.info("был вызван метод : findById(Long id)");
-        Student student =studentRepository.findById(id).get();
+        Student student = studentRepository.findById(id).get();
         if (student == null) {
             LOG.info("ошибка:в параметр метода findById(Long id) введён не корректный id");
         }
@@ -133,7 +135,7 @@ public class StudentService {
 
     public Integer getCountStudent() {
         LOG.info("был вызван метод : getCountStudent()");
-        return     studentRepository.getCountStudent();
+        return studentRepository.getCountStudent();
     }
 
     public Double getCountAverageAge() {
@@ -141,10 +143,10 @@ public class StudentService {
         return studentRepository.getCountAverageAge();
     }
 
-   public List<Student> lastStudents() {
-       LOG.info("был вызван метод : lastStudents()");
-       return studentRepository.lastStudents();
-   }
+    public List<Student> lastStudents() {
+        LOG.info("был вызван метод : lastStudents()");
+        return studentRepository.lastStudents();
+    }
 
 
 }
