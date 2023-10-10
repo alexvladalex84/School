@@ -16,6 +16,7 @@ import ru.hogwarts_school.model.Student;
 
 import java.util.Collection;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,19 +35,19 @@ class SchoolApplicationStudentControllerSpringBootTestTest {
 
     @Autowired
     private StudentController studentController;   //проверяемый контроллер
-//    @Autowired
-//    private TestController testController;
+    @Autowired
+    private TestController testController;
 
 
     @Test
     public void contextLoads() throws Exception {             //контроллер создался и существует
 
         Assertions.assertThat(studentController).isNotNull();
-//        assertThat(testController).isNotNull();
+        assertThat(testController).isNotNull();
 
     }
 
-    //    @Test
+//        @Test
 //    public void greetings() throws Exception{
 //
 //                assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/greetings", String.class))
@@ -79,7 +80,7 @@ class SchoolApplicationStudentControllerSpringBootTestTest {
         student.setName("Bob");
         student.setAge(20);
 //create   post запрос
-        ResponseEntity<Student> responseCreate = restTemplate.postForEntity("/student", student, Student.class);//Student.class возвращаемый класс
+        ResponseEntity<Student> responseCreate = restTemplate.postForEntity("/student" , student, Student.class);//Student.class возвращаемый класс
         Assertions.assertThat(responseCreate).isNotNull();
         Assertions.assertThat(responseCreate.getStatusCode()).isEqualTo(HttpStatus.OK);//проверяем статус 200(ОК это 200)
         Student respBody = responseCreate.getBody();// переменная с телом запроса

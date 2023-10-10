@@ -1,6 +1,6 @@
 package ru.hogwarts_school.controllers;
 
-import liquibase.Liquibase;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,7 @@ import java.util.Collection;
 public class SchoolApplicationFacultyControllerSpringBootTestTest {
     @Autowired
     private TestRestTemplate restTemplate;
-    @Value("${spring.liquibase.change-log}")
-    private Path path;
+
     @LocalServerPort
     private int port;
 
